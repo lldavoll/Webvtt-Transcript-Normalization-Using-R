@@ -53,28 +53,23 @@ Edit the paths with the directory where all the data is.
 
 ```{r configuration}
 # (!) YOUR working directory, ending with "Cleanup" folder (wd):
-your_wd <- "C:/Users/ateni/Desktop/U of A/EXPERIMENTOS/CoVIBA"
+# Define input directory (relative path)
+input_dir <- file.path("data", "raw")
 
-stopifnot(dir.exists(your_wd))
-setwd(your_wd)
-getwd()  # confirm correct wd
+# Check if directory exists
+stopifnot(dir.exists(input_dir))
 
-# Getting file name list from working directory
-filelist <- list.files(pattern = "\\.txt$")
+# Get list of transcript files
+filelist <- list.files(input_dir, pattern = "\\.txt$", full.names = TRUE)
+
 stopifnot(length(filelist) > 0)
 
-# Pre-allocate data frame (avoid growing it inside the loop)
+# Pre-allocate data frame
 files <- data.frame(
   Name = character(length(filelist)),
   Text = character(length(filelist)),
   stringsAsFactors = FALSE
 )
-
-# Collect names and text content
-for (i in seq_along(filelist)) {
-  files$Name[i] <- paste0("Cleaned_", filelist[i])
-  files$Text[i] <- read_file(filelist[i])
-}
 ```
 
 ## Step 1 – Remove NOTE blocks and UUID artifacts
@@ -273,19 +268,17 @@ files$Text <- mapply(assign_timestamps, files$Name, files$Text, files$end_time, 
 This final stage writes the processed transcripts to disk. Instead of changing the working directory, now its explicitly define an output directory and construct full file paths when saving.
 
 ```{r step_4_save_files}
-# Define output directory explicitly
-output_dir <- file.path(your_wd, "Post R Cleanup")
+save_outputs <- function(files, output_dir = "outputs") {
 
-# Create directory if it does not exist
-dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+  dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
-# Write each cleaned transcript
-for (i in seq_len(nrow(files))) {
-  write_file(
-    files$Text[i],
-    file.path(output_dir, files$Name[i])
-  )
+  for (i in seq_len(nrow(files))) {
+    readr::write_file(
+      files$Text[i],
+      file.path(output_dir, files$Name[i])
+    )
+  }
+
+  cat("Cleanup script complete!\n")
 }
-
-cat("Cleanup script complete!\n")
 ```
