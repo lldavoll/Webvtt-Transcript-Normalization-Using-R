@@ -1,7 +1,26 @@
+# R / RStudio
+.Rhistory
+.RData
+.Rproj.user/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (protected / local only)
 data/raw/*
 data/processed/*
-outputs/*
 
+# Keep placeholder README files
 !data/raw/README.md
 !data/processed/README.md
+
+# Outputs (generated files)
+outputs/*
+
+# Keep placeholder README
 !outputs/README.md
+
+# Large files (optional safeguard)
+*.zip
+*.tar.gz
