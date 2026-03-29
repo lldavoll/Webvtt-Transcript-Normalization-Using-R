@@ -90,6 +90,3 @@ Step-by-step:
 
 ## Status
 Ongoing project — actively being expanded for large-scale corpus processing.
-
-## License
-MIT (recommended)
