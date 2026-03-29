@@ -1,1 +1,7 @@
+data/raw/*
+data/processed/*
+outputs/*
 
+!data/raw/README.md
+!data/processed/README.md
+!outputs/README.md
